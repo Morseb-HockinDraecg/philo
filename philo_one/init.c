@@ -5,8 +5,7 @@ static void	init_forks(t_philo *p)
 	int				i;
 
 	i = p->nb;
-	p->forks = (pthread_mutex_t *)malloc \
-	(sizeof(pthread_mutex_t) * i);
+	p->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * i);
 	if (!p->forks)
 	{
 		write(2, "mutex malloc failed!\n", ft_strlen("mutex malloc failed !\n"));
@@ -49,11 +48,11 @@ int	init(int argc, char **argv, t_philo *p)
 {
 	int	i;
 
-	pthread_mutex_init(&p->print, NULL);
 	p->nb = ft_atoi(argv[1]);
 	i = p->nb;
 	if (!i)
 		return (E_FAIL);
+	pthread_mutex_init(&p->print, NULL);
 	p->die = ft_atoi(argv[2]);
 	p->eat = ft_atoi(argv[3]);
 	p->sleep = ft_atoi(argv[4]);

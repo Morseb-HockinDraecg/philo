@@ -44,18 +44,20 @@ static void	refrech_list(t_philo *p, int philo_n)
 
 static void	philo_loop(t_philo *p, int philo_n)
 {
-	int	action;
+	int	id;
 
-	action = chosing_action(p, philo_n);
-	if (action == -1)
+	id = chosing_action(p, philo_n);
+	if (id == -1)
 		return ;
 	p->philo_last_meal_tmp[philo_n - 1] = get_time(p);
 	print_msg("is eating\n", p, philo_n, E_EAT);
-	usleep(p->eat);
-	p->philo_last_meal[philo_n - 1] = get_time(p);
+	usleep(p->eat * 1000);
+	pthread_mutex_unlock(&p->forks[philo_n - 1]);
+	pthread_mutex_unlock(&p->forks[id]);
+	p->philo_last_meal_tmp[philo_n - 1] = get_time(p);
 	refrech_list(p, philo_n);
 	print_msg("is sleeping\n", p, philo_n, E_SLEEP);
-	usleep(p->sleep);
+	usleep(p->sleep * 1000);
 	print_msg("is thinking\n", p, philo_n, E_THINK);
 }
 
