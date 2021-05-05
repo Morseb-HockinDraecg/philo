@@ -5,7 +5,6 @@ static void	init_forks(t_philo *p)
 	int				i;
 
 	i = p->nb;
-	p->forks = NULL;
 	p->forks = (pthread_mutex_t *)malloc \
 	(sizeof(pthread_mutex_t) * i);
 	if (!p->forks)
@@ -17,25 +16,29 @@ static void	init_forks(t_philo *p)
 		pthread_mutex_init(&(p->forks[i]), NULL);
 }
 
-static void	init_philo_need_to_eat(t_philo *p)
+static int	init_philo_list(t_philo *p)
 {
 	int	i;
 
 	i = p->nb;
-	p->philo_need_to_eat = NULL;
 	p->philo_need_to_eat = (int *)malloc(sizeof(int) * i);
-	if (!p->philo_need_to_eat)
+	p->philo_last_action = (int *)malloc(sizeof(int) * i);
+	p->philo_last_meal = (int *)malloc(sizeof(int) * i);
+	if (!p->philo_need_to_eat || !p->philo_last_action || !p->philo_last_meal)
 	{
 		write(2, "malloc failed !\n", ft_strlen("malloc failed !\n"));
-		return ;
+		return (1);
 	}
 	while (i--)
 	{
+		p->philo_last_meal[i] = p->start;
+		p->philo_last_action[i] = -1;
 		if (i % 2)
 			p->philo_need_to_eat[i] = 1;
 		else
 			p->philo_need_to_eat[i] = 0;
 	}
+	return (0);
 }
 
 int	init(int argc, char **argv, t_philo *p)
@@ -57,8 +60,7 @@ int	init(int argc, char **argv, t_philo *p)
 	p->start = 0;
 	p->start = get_time(p);
 	init_forks(p);
-	init_philo_need_to_eat(p);
-	pthread_manag(p);
+	pthread_manag(p, init_philo_list(p));
 	while (i--)
 		pthread_mutex_destroy(&(p->forks[i]));
 	pthread_mutex_destroy(&p->print);

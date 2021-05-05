@@ -19,6 +19,8 @@ typedef struct s_philo
 	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
 	int				*philo_need_to_eat;
+	int				*philo_last_action;
+	int				*philo_last_meal;
 }	t_philo;
 
 enum	e_action
@@ -36,7 +38,7 @@ enum	e_retrun
 	E_FAIL,
 };
 
-void		pthread_manag(t_philo *p);
+void		pthread_manag(t_philo *p, int stop);
 
 int			chosing_action(t_philo *p, int philo_n);
 
@@ -45,6 +47,6 @@ int			ft_strlen(char *s);
 int			init(int argc, char **argv, t_philo *philo);
 void		free_mallocs(t_philo *p);
 long int	get_time(t_philo *p);
-void		print_msg(const char *s, t_philo *p, int philo_n);
+void		print_msg(const char *s, t_philo *p, int philo_n, int action);
 
 #endif

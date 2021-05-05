@@ -1,9 +1,33 @@
 #include "philo.h"
 
-static void	refrech_list(t_philo *p, int philo_n)
+static void	treatment(t_philo *p, int philo_n)
 {
 	int	i;
 	int	fill[2];
+
+	if (philo_n % 2)
+	{
+		fill[0] = 1;
+		fill[1] = 0;
+	}
+	else
+	{
+		fill[0] = 0;
+		fill[1] = 1;
+	}
+	i = p->nb;
+	while (i--)
+	{
+		if (i % 2)
+			p->philo_need_to_eat[i] = fill[0];
+		else
+			p->philo_need_to_eat[i] = fill[1];
+	}
+}
+
+static void	refrech_list(t_philo *p, int philo_n)
+{
+	int	i;
 
 	pthread_mutex_lock(&p->print);
 	p->philo_need_to_eat[philo_n - 1] = 0;
@@ -13,41 +37,21 @@ static void	refrech_list(t_philo *p, int philo_n)
 		if (p->philo_need_to_eat[i] == 1)
 			break ;
 	}
-	if (i == 0)
-	{
-		i = p->nb;
-		if (philo_n % 2)
-		{
-			fill[0] = 0;
-			fill[1] = 1;
-		}
-		else
-		{
-			fill[0] = 1;
-			fill[1] = 0;
-		}
-		while (i--)
-		{
-			if (i % 2)
-				p->philo_need_to_eat[i] = fill[0];
-			else
-				p->philo_need_to_eat[i] = fill[1];
-		}
-	}
+	if (i == -1)
+		treatment(p, philo_n);
 	pthread_mutex_unlock(&p->print);
 }
 
 static void	philo_loop(t_philo *p, int philo_n)
 {
-	int	action;
-
-	action = chosing_action(p, philo_n);
-	refrech_list(p, philo_n);
-	print_msg("is eating\n", p, philo_n);
+	chosing_action(p, philo_n);
+	print_msg("is eating\n", p, philo_n, E_EAT);
 	usleep(p->eat);
-	// print_msg("is sleeping\n", p, philo_n);
-	// usleep(p->sleep);
-	// print_msg("is thinking\n", p, philo_n);
+	p->philo_last_meal[philo_n - 1] = get_time(p);
+	refrech_list(p, philo_n);
+	print_msg("is sleeping\n", p, philo_n, E_SLEEP);
+	usleep(p->sleep);
+	print_msg("is thinking\n", p, philo_n, E_THINK);
 }
 
 static void	*routine(void *pt)
@@ -64,11 +68,13 @@ static void	*routine(void *pt)
 	return (NULL);
 }
 
-void	pthread_manag(t_philo *p)
+void	pthread_manag(t_philo *p, int stop)
 {
 	pthread_t	*th;
 	int			i;
 
+	if (stop)
+		return ;
 	p->init_philo = p->nb;
 	th = (pthread_t *)malloc(sizeof(pthread_t) * p->nb);
 	i = -1;

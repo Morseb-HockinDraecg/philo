@@ -35,6 +35,8 @@ void	free_mallocs(t_philo *p)
 {
 	free(p->forks);
 	free(p->philo_need_to_eat);
+	free(p->philo_last_action);
+	free(p->philo_last_meal);
 }
 
 long int	get_time(t_philo *p)
@@ -48,10 +50,13 @@ long int	get_time(t_philo *p)
 		return ((time.tv_sec * 1000 + time.tv_usec / 1000) - p->start);
 }
 
-void	print_msg(const char *s, t_philo *p, int philo_n)
+void	print_msg(const char *s, t_philo *p, int philo_n, int action)
 {
 	pthread_mutex_lock(&p->print);
-	// printf("%4ld %d %s", get_time(p), philo_n, s);
-printf("%d %s", philo_n, s);
+	if (p->philo_last_action[philo_n - 1] != action)
+	{
+		p->philo_last_action[philo_n - 1] = action;
+		printf("%4ld %d %s", get_time(p), philo_n, s);
+	}
 	pthread_mutex_unlock(&p->print);
 }

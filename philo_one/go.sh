@@ -1,5 +1,5 @@
 if [ $# != 0 ]; then
 	ARG=$@; make ; ./philo_one $ARG; make clean
 else
-	ARG="3 1000 300 300 3"; make ; ./philo_one $ARG; make clean
+	ARG="10 3000 3000 3000 10"; make ; ./philo_one $ARG; make clean
 fi

@@ -1,61 +1,52 @@
 #include "philo.h"
 
-static void	print_philo(t_philo *p, int philo_n, int action)
-{
-	if (action == E_FORK)
-		print_msg("has taken a fork\n", p, philo_n);
-	else if (action == E_THINK)
-		print_msg("is thinking\n", p, philo_n);
-	else if (action == E_DIE)
-	{
-		print_msg("died\n", p, philo_n);
-		p->die = 0;
-		// pthread_detach(p->forks);
-		// free_mallocs(p);
-		// exit(0);
-	}
-}
+// static void	print_philo(t_philo *p, int philo_n, int action)
+// {
+// 	// if (action == E_FORK)
+// 	// 	print_msg("has taken a fork\n", p, philo_n);
+// 	// else if (action == E_THINK)
+// 	// 	print_msg("is thinking\n", p, philo_n);
+// 	// else if (action == E_DIE)
+// 	{
+// 		print_msg("died\n", p, philo_n);
+// 		p->die = 0;
+// 		// pthread_detach(p->forks);
+// 		// free_mallocs(p);
+// 		// exit(0);
+// 	}
+// 	(void)action;
+// }
 
 static int	chosen_index(t_philo *p)
 {
 	int	i;
 
 	i = 0;
+	pthread_mutex_lock(&p->print);
 	while (p->philo_need_to_eat[i] != 0 && i < (p->nb))
-			i++;
-	if (i == p->nb)
-		chosen_index(p);
+		i++;
+	if (i != p->nb)
+		p->philo_need_to_eat[i] = 2;
+	pthread_mutex_unlock(&p->print);
 	return (i);
 }
 
-// int	chosing_action(t_philo *p, int philo_n)
 static void	chosing_action_algo(t_philo *p, int philo_n, int *has_eat)
 {
 	int			i;
-	static int	action = -1;
+	int			philo;
 
-	if (p->philo_need_to_eat[philo_n - 1] == 1)
+	philo = philo_n - 1;
+	if (p->philo_need_to_eat[philo] == 1)
 	{
-		pthread_mutex_lock(&p->forks[philo_n - 1]);
-		i = chosen_index(p);
-		pthread_mutex_lock(&p->forks[i]);
-		pthread_mutex_lock(&p->print);
-		p->philo_need_to_eat[i] = 2;
-		pthread_mutex_unlock(&p->print);
-		if (action != E_FORK)
-		{
-			print_philo((t_philo *)p, philo_n, E_FORK);
-			action = E_THINK;
-		}
+		print_msg("has taken a fork\n", p, philo_n, E_FORK);
+		i = p->nb;
+		while (i == p->nb)
+			i = chosen_index(p);
 		*has_eat = 1;
-		pthread_mutex_unlock(&p->forks[philo_n - 1]);
-		pthread_mutex_unlock(&p->forks[i]);
 	}
-	if (action != E_THINK)
-	{
-		action = E_THINK;
-		print_philo((t_philo *)p, philo_n, E_THINK);
-	}
+	else
+		print_msg("is thinking\n", p, philo_n, E_THINK);
 }
 
 int	chosing_action(t_philo *p, int philo_n)
