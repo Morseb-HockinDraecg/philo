@@ -9,8 +9,8 @@ SRC := main.c \
 OBJ := $(SRC:%.c=%.o)
 
 CC := gcc
-# CFLAGS := -Wall -Wextra -Werror
-CFLAGS := -Wall -Wextra -Werror -g3
+CFLAGS := -Wall -Wextra -Werror
+# CFLAGS := -Wall -Wextra -Werror -g3
 # LDFLAGS	:= -fsanitize=address
 
 all : $(NAME)

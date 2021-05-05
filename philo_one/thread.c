@@ -44,7 +44,12 @@ static void	refrech_list(t_philo *p, int philo_n)
 
 static void	philo_loop(t_philo *p, int philo_n)
 {
-	chosing_action(p, philo_n);
+	int	action;
+
+	action = chosing_action(p, philo_n);
+	if (action == -1)
+		return ;
+	p->philo_last_meal_tmp[philo_n - 1] = get_time(p);
 	print_msg("is eating\n", p, philo_n, E_EAT);
 	usleep(p->eat);
 	p->philo_last_meal[philo_n - 1] = get_time(p);
@@ -61,10 +66,15 @@ static void	*routine(void *pt)
 	t_philo	*p;
 
 	p = (t_philo *)pt;
+	pthread_mutex_lock(&p->print);
 	philo_n = p->init_philo--;
 	turns = p->turns;
+	pthread_mutex_unlock(&p->print);
 	while (turns-- && p->die)
 		philo_loop(p, philo_n);
+	pthread_mutex_lock(&p->print);
+	p->finished++;
+	pthread_mutex_unlock(&p->print);
 	return (NULL);
 }
 
@@ -80,6 +90,7 @@ void	pthread_manag(t_philo *p, int stop)
 	i = -1;
 	while (++i < p->nb)
 		pthread_create(th + i, NULL, &routine, p);
+	loop_ckecking_dying_philo(p);
 	i = -1;
 	while (++i < p->nb)
 		pthread_join(th[i], NULL);

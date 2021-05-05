@@ -24,20 +24,24 @@ static int	init_philo_list(t_philo *p)
 	p->philo_need_to_eat = (int *)malloc(sizeof(int) * i);
 	p->philo_last_action = (int *)malloc(sizeof(int) * i);
 	p->philo_last_meal = (int *)malloc(sizeof(int) * i);
-	if (!p->philo_need_to_eat || !p->philo_last_action || !p->philo_last_meal)
+	p->philo_last_meal_tmp = (int *)malloc(sizeof(int) * i);
+	if (!p->philo_need_to_eat || !p->philo_last_action || !p->philo_last_meal \
+	|| !p->philo_last_meal_tmp)
 	{
 		write(2, "malloc failed !\n", ft_strlen("malloc failed !\n"));
 		return (1);
 	}
 	while (i--)
 	{
-		p->philo_last_meal[i] = p->start;
+		p->philo_last_meal[i] = get_time(p);
+		p->philo_last_meal_tmp[i] = 0;
 		p->philo_last_action[i] = -1;
 		if (i % 2)
 			p->philo_need_to_eat[i] = 1;
 		else
 			p->philo_need_to_eat[i] = 0;
 	}
+	p->finished = 0;
 	return (0);
 }
 

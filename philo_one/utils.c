@@ -53,7 +53,7 @@ long int	get_time(t_philo *p)
 void	print_msg(const char *s, t_philo *p, int philo_n, int action)
 {
 	pthread_mutex_lock(&p->print);
-	if (p->philo_last_action[philo_n - 1] != action)
+	if (p->philo_last_action[philo_n - 1] != action && p->die)
 	{
 		p->philo_last_action[philo_n - 1] = action;
 		printf("%4ld %d %s", get_time(p), philo_n, s);

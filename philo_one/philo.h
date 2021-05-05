@@ -16,11 +16,13 @@ typedef struct s_philo
 	int				turns;
 	long			start;
 	int				init_philo;
+	int				finished;
 	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
 	int				*philo_need_to_eat;
 	int				*philo_last_action;
 	int				*philo_last_meal;
+	int				*philo_last_meal_tmp;
 }	t_philo;
 
 enum	e_action
@@ -48,5 +50,6 @@ int			init(int argc, char **argv, t_philo *philo);
 void		free_mallocs(t_philo *p);
 long int	get_time(t_philo *p);
 void		print_msg(const char *s, t_philo *p, int philo_n, int action);
+void		loop_ckecking_dying_philo(t_philo *p);
 
 #endif
