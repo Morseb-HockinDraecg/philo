@@ -28,6 +28,7 @@ typedef struct s_philo
 enum	e_action
 {
 	E_FORK,
+	E_FORK_2,
 	E_EAT,
 	E_SLEEP,
 	E_THINK,

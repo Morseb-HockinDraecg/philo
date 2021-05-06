@@ -49,8 +49,9 @@ static void	philo_loop(t_philo *p, int philo_n)
 	id = chosing_action(p, philo_n);
 	if (id == -1)
 		return ;
-	p->philo_last_meal_tmp[philo_n - 1] = get_time(p);
+	print_msg("has taken a fork\n", p, philo_n, E_FORK_2);
 	print_msg("is eating\n", p, philo_n, E_EAT);
+	p->philo_last_meal_tmp[philo_n - 1] = get_time(p) + 5;
 	usleep(p->eat * 1000);
 	sem_post(&p->forks[philo_n - 1]);
 	sem_post(&p->forks[id]);

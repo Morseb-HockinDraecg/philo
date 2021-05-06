@@ -12,14 +12,14 @@ void	loop_ckecking_dying_philo(t_philo *p)
 	while (p->die && p->finished != end)
 	{
 		i = -1;
-		while (i++ < p->nb)
+		while (++i < p->nb)
 		{
 			if (p->philo_last_meal[i] >= p->die)
 			{
 				pthread_mutex_lock(&p->print);
 				p->die = 0;
 				printf("%4ld %d %s", get_time(p), (i + 1), "died\n");
-				usleep(50);
+				usleep(100);
 				pthread_mutex_unlock(&p->print);
 				return ;
 			}
