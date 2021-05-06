@@ -29,7 +29,7 @@ static void	refrech_list(t_philo *p, int philo_n)
 {
 	int	i;
 
-	pthread_mutex_lock(&p->print);
+	sem_wait(p->print);
 	p->philo_need_to_eat[philo_n - 1] = 0;
 	i = p->nb;
 	while (i--)
@@ -39,7 +39,7 @@ static void	refrech_list(t_philo *p, int philo_n)
 	}
 	if (i == -1)
 		treatment(p, philo_n);
-	pthread_mutex_unlock(&p->print);
+	sem_post(p->print);
 }
 
 static void	philo_loop(t_philo *p, int philo_n)
@@ -49,11 +49,11 @@ static void	philo_loop(t_philo *p, int philo_n)
 	id = chosing_action(p, philo_n);
 	if (id == -1)
 		return ;
-	print_msg("is eating\n", p, philo_n, E_EAT);
 	p->philo_last_meal_tmp[philo_n - 1] = get_time(p);
+	print_msg("is eating\n", p, philo_n, E_EAT);
 	usleep(p->eat * 1000);
-	pthread_mutex_unlock(&p->forks[philo_n - 1]);
-	pthread_mutex_unlock(&p->forks[id]);
+	sem_post(&p->forks[philo_n - 1]);
+	sem_post(&p->forks[id]);
 	refrech_list(p, philo_n);
 	print_msg("is sleeping\n", p, philo_n, E_SLEEP);
 	usleep(p->sleep * 1000);
@@ -67,15 +67,15 @@ static void	*routine(void *pt)
 	t_philo	*p;
 
 	p = (t_philo *)pt;
-	pthread_mutex_lock(&p->print);
+	sem_wait(p->print);
 	philo_n = p->init_philo--;
 	turns = p->turns;
-	pthread_mutex_unlock(&p->print);
+	sem_post(p->print);
 	while (turns-- && p->die)
 		philo_loop(p, philo_n);
-	pthread_mutex_lock(&p->print);
+	sem_wait(p->print);
 	p->finished++;
-	pthread_mutex_unlock(&p->print);
+	sem_post(p->print);
 	return (NULL);
 }
 
