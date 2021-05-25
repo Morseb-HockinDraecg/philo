@@ -54,9 +54,11 @@ void	print_msg(const char *s, t_philo *p, int philo_n, int action)
 
 	background = philo_n % 6;
 	sem_wait(p->print);
-	if (p->philo_last_action[philo_n - 1] != action && p->die)
+	if (p->philo_last_action[philo_n - 1] != action && p->die && p->tot != 0)
 	{
 		p->philo_last_action[philo_n - 1] = action;
+		if (action == E_EAT)
+			p->tot--;
 		if (background == 0)
 			printf("\e[41m\e[30m%4ld %d\e[49m\e[97m %s", get_time(p), philo_n, s);
 		else if (background == 1)

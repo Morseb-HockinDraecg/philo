@@ -4,7 +4,6 @@ static void	init_semaphore(t_philo *p)
 {
 	sem_unlink("/print");
 	p->print = sem_open("/print", O_CREAT, S_IRWXU, 1);
-	p->forks = NULL;
 	sem_unlink("/forks");
 	p->forks = sem_open("/forks", O_CREAT, S_IRWXU, p->nb);
 }
@@ -13,6 +12,8 @@ static void	close_semaphore(t_philo *p)
 {
 	sem_close(p->forks);
 	sem_close(p->print);
+	sem_unlink("/print");
+	sem_unlink("/forks");
 }
 
 static int	init_philo_list(t_philo *p)
@@ -53,10 +54,10 @@ int	init(int argc, char **argv, t_philo *p)
 		p->turns = ft_atoi(argv[5]);
 	else
 		p->turns = -1;
+	p->tot = p->turns;
 	p->start = 0;
 	p->start = get_time(p);
 	init_semaphore(p);
-	// pthread_manag(p, init_philo_list(p));
 	process_manag(p, init_philo_list(p));
 	close_semaphore(p);
 	free_mallocs(p);

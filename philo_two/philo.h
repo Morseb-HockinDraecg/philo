@@ -15,6 +15,7 @@ typedef struct s_philo
 	int				eat;
 	int				sleep;
 	int				turns;
+	int				tot;
 	long			start;
 	int				init_philo;
 	int				finished;

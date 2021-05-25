@@ -3,10 +3,12 @@
 
 # include <stdio.h>
 # include <unistd.h>
-// # include <pthread.h>
+# include <pthread.h>
 # include <sys/time.h>
 # include <stdlib.h>
 # include <semaphore.h>
+# include <errno.h>
+# include <signal.h>
 
 typedef struct s_philo
 {
@@ -15,6 +17,7 @@ typedef struct s_philo
 	int				eat;
 	int				sleep;
 	int				turns;
+	int				tot;
 	long			start;
 	int				init_philo;
 	int				finished;
@@ -41,7 +44,6 @@ enum	e_retrun
 	E_FAIL,
 };
 
-// void		pthread_manag(t_philo *p, int stop);
 void		process_manag(t_philo *p, int stop);
 
 int			chosing_action(t_philo *p, int philo_n);
@@ -52,6 +54,6 @@ int			init(int argc, char **argv, t_philo *philo);
 void		free_mallocs(t_philo *p);
 long int	get_time(t_philo *p);
 void		print_msg(const char *s, t_philo *p, int philo_n, int action);
-void		loop_ckecking_dying_philo(t_philo *p);
+int			loop_ckecking_dying_philo(t_philo *p);
 
 #endif

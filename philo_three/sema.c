@@ -1,6 +1,6 @@
 #include "philo.h"
 
-void	loop_ckecking_dying_philo(t_philo *p)
+int	loop_ckecking_dying_philo(t_philo *p)
 {
 	int	i;
 	int	end;
@@ -19,12 +19,15 @@ void	loop_ckecking_dying_philo(t_philo *p)
 				sem_wait(p->print);
 				p->die = 0;
 				printf("%4ld %d %s", get_time(p), (i + 1), "died\n");
-				usleep(100);
+				// kill(0, SIGKILL);
+				// usleep(100);
+				// exit(1);
 				sem_post(p->print);
-				return ;
+				return (1);
 			}
 		}
 	}
+	return (0);
 }
 
 static void	chosing_action_algo(t_philo *p, int philo_n, int *has_eat)
@@ -35,7 +38,7 @@ static void	chosing_action_algo(t_philo *p, int philo_n, int *has_eat)
 	philo = philo_n - 1;
 	p->philo_last_meal[philo] = get_time(p) - p->philo_last_meal_tmp[philo];
 	if (philo_n % 2)
-		usleep(5);
+		usleep(100);
 	sem_wait(p->forks);
 	print_msg("\e[33mhas taken a fork\e[00m\n", p, philo_n, E_FORK);
 	i = philo_n % p->nb;

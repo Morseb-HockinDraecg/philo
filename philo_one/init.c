@@ -54,6 +54,7 @@ int	init(int argc, char **argv, t_philo *p)
 		p->turns = ft_atoi(argv[5]);
 	else
 		p->turns = -1;
+	p->tot = p->turns * p->nb;
 	p->start = 0;
 	p->start = get_time(p);
 	init_forks(p);
