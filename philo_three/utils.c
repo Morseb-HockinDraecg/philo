@@ -33,7 +33,6 @@ int	ft_strlen(char *s)
 
 void	free_mallocs(t_philo *p)
 {
-	free(p->forks);
 	free(p->philo_last_action);
 	free(p->philo_last_meal);
 }

@@ -4,7 +4,6 @@ static void	init_semaphore(t_philo *p)
 {
 	sem_unlink("/print");
 	p->print = sem_open("/print", O_CREAT, S_IRWXU, 1);
-	p->forks = NULL;
 	sem_unlink("/forks");
 	p->forks = sem_open("/forks", O_CREAT, S_IRWXU, p->nb);
 }

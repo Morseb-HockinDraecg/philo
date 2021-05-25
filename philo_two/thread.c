@@ -11,8 +11,8 @@ static void	philo_loop(t_philo *p, int philo_n)
 	print_msg("\e[32mis eating\e[00m\n", p, philo_n, E_EAT);
 	p->philo_last_meal_tmp[philo_n - 1] = get_time(p) + 5;
 	usleep(p->eat * 1000);
-	sem_post(&p->forks[philo_n - 1]);
-	sem_post(&p->forks[id]);
+	sem_post(p->forks);
+	sem_post(p->forks);
 	print_msg("is sleeping\n", p, philo_n, E_SLEEP);
 	usleep(p->sleep * 1000);
 	print_msg("is thinking\n", p, philo_n, E_THINK);

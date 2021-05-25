@@ -34,10 +34,12 @@ static void	chosing_action_algo(t_philo *p, int philo_n, int *has_eat)
 
 	philo = philo_n - 1;
 	p->philo_last_meal[philo] = get_time(p) - p->philo_last_meal_tmp[philo];
-	sem_wait(&p->forks[philo_n - 1]);
+	if (philo_n % 2)
+		usleep(5);
+	sem_wait(p->forks);
 	print_msg("\e[33mhas taken a fork\e[00m\n", p, philo_n, E_FORK);
 	i = philo_n % p->nb;
-	sem_wait(&p->forks[i]);
+	sem_wait(p->forks);
 	*has_eat = i;
 }
 
