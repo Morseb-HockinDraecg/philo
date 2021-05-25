@@ -3,13 +3,8 @@
 int	loop_ckecking_dying_philo(t_philo *p)
 {
 	int	i;
-	int	end;
 
-	if (p->turns > 0)
-		end = p->nb;
-	else
-		end = -1;
-	while (p->die && p->finished != end)
+	while (p->die && p->finished != 1)
 	{
 		i = -1;
 		while (++i < p->nb)
@@ -21,8 +16,7 @@ int	loop_ckecking_dying_philo(t_philo *p)
 				printf("%4ld %d %s", get_time(p), (i + 1), "died\n");
 				// kill(0, SIGKILL);
 				// usleep(100);
-				// exit(1);
-				sem_post(p->print);
+				// sem_post(p->print);
 				return (1);
 			}
 		}

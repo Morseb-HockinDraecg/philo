@@ -41,15 +41,19 @@ static int	pthread_manag(t_philo *p, int philo_n)
 	p->init_philo = p->nb;
 	p->init_philo = philo_n;
 	pthread_create(&th, NULL, &routine, p);
-	pthread_detach(th);
-	return (loop_ckecking_dying_philo(p));
-	// return (0);
+	// pthread_detach(th);
+	loop_ckecking_dying_philo(p);
+	pthread_join(th, 0);
+	// return (loop_ckecking_dying_philo(p));
+	exit(1);
+	return (0);
 }
 
 void	process_manag(t_philo *p, int stop)
 {
 	int			i;
 	int			pid;
+	int			*pid_child;
 
 	if (stop)
 		return ;
@@ -60,8 +64,10 @@ void	process_manag(t_philo *p, int stop)
 		pid = fork();
 		if (!pid)
 			break ;
+		else
+			printf("%d\n", pid); //pid de l enfant a stocker dans *pid_child = malloc( nb_philo) puis kill quand retour d un mort
 	}
-	if (pid == 0)
+	if (!pid)
 	{
 		pid = pthread_manag(p, i + 1);
 		// if (pid)
@@ -79,6 +85,5 @@ void	process_manag(t_philo *p, int stop)
 			if (errno == ECHILD)
 				break ;
 		}
-			loop_ckecking_dying_philo(p);
 	}
 }
