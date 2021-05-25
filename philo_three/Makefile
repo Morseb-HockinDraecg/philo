@@ -1,6 +1,12 @@
-NAME := philo_two
+NAME := philo_three
 
-SRC := main.c
+SRC := main.c \
+	init.c \
+	process.c \
+	sema.c \
+	utils.c
+
+# thread.c
 
 OBJ := $(SRC:%.c=%.o)
 

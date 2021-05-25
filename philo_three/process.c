@@ -11,8 +11,8 @@ static void	philo_loop(t_philo *p, int philo_n)
 	print_msg("\e[32mis eating\e[00m\n", p, philo_n, E_EAT);
 	p->philo_last_meal_tmp[philo_n - 1] = get_time(p) + 5;
 	usleep(p->eat * 1000);
-	pthread_mutex_unlock(&p->forks[philo_n - 1]);
-	pthread_mutex_unlock(&p->forks[id]);
+	sem_post(&p->forks[philo_n - 1]);
+	sem_post(&p->forks[id]);
 	print_msg("is sleeping\n", p, philo_n, E_SLEEP);
 	usleep(p->sleep * 1000);
 	print_msg("is thinking\n", p, philo_n, E_THINK);
@@ -25,33 +25,43 @@ static void	*routine(void *pt)
 	t_philo	*p;
 
 	p = (t_philo *)pt;
-	pthread_mutex_lock(&p->print);
+	sem_wait(p->print);
 	philo_n = p->init_philo--;
 	turns = p->turns;
-	pthread_mutex_unlock(&p->print);
+	sem_post(p->print);
 	while (turns-- && p->die)
 		philo_loop(p, philo_n);
-	pthread_mutex_lock(&p->print);
+	sem_wait(p->print);
 	p->finished++;
-	pthread_mutex_unlock(&p->print);
+	sem_post(p->print);
 	return (NULL);
 }
 
-void	pthread_manag(t_philo *p, int stop)
+void	process_manag(t_philo *p, int stop)
 {
-	pthread_t	*th;
+	// pthread_t	*th;
 	int			i;
+	int			id;
 
 	if (stop)
 		return ;
 	p->init_philo = p->nb;
-	th = (pthread_t *)malloc(sizeof(pthread_t) * p->nb);
+	// th = (pthread_t *)malloc(sizeof(pthread_t) * p->nb);
 	i = -1;
 	while (++i < p->nb)
-		pthread_create(th + i, NULL, &routine, p);
+		// pthread_create(th + i, NULL, &routine, p);
+	{
+		id = fork();
+		if (!id)
+			break ;
+		// if (id)
+		// 	fork();
+	}
+	if (!id)
+		routine(p);
 	loop_ckecking_dying_philo(p);
 	i = -1;
-	while (++i < p->nb)
-		pthread_join(th[i], NULL);
-	free(th);
+	// while (++i < p->nb)
+		// pthread_join(th[i], NULL);
+	// free(th);
 }

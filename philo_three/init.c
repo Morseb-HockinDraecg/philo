@@ -56,7 +56,8 @@ int	init(int argc, char **argv, t_philo *p)
 	p->start = 0;
 	p->start = get_time(p);
 	init_semaphore(p);
-	pthread_manag(p, init_philo_list(p));
+	// pthread_manag(p, init_philo_list(p));
+	process_manag(p, init_philo_list(p));
 	close_semaphore(p);
 	free_mallocs(p);
 	return (E_SUCCESS);

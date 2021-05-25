@@ -1,10 +1,8 @@
 all:
-	$(info Make philo_one)
 	$(MAKE) -C ./philo_one
-	$(info Make philo_two)
 	$(MAKE) -C ./philo_two
-	$(info Make philo_three)
 	$(MAKE) -C ./philo_three
+	$(info Make philo)
 
 clean:
 	$(MAKE) clean -C ./philo_one

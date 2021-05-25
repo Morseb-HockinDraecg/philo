@@ -19,7 +19,6 @@ typedef struct s_philo
 	int				finished;
 	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
-	int				*philo_need_to_eat;
 	int				*philo_last_action;
 	int				*philo_last_meal;
 	int				*philo_last_meal_tmp;

@@ -34,7 +34,6 @@ int	ft_strlen(char *s)
 void	free_mallocs(t_philo *p)
 {
 	free(p->forks);
-	free(p->philo_need_to_eat);
 	free(p->philo_last_action);
 	free(p->philo_last_meal);
 }
@@ -52,11 +51,25 @@ long int	get_time(t_philo *p)
 
 void	print_msg(const char *s, t_philo *p, int philo_n, int action)
 {
+	int	background;
+
+	background = philo_n % 6;
 	pthread_mutex_lock(&p->print);
 	if (p->philo_last_action[philo_n - 1] != action && p->die)
 	{
 		p->philo_last_action[philo_n - 1] = action;
-		printf("%4ld %d %s", get_time(p), philo_n, s);
+		if (background == 0)
+			printf("\e[41m\e[30m%4ld %d\e[49m\e[97m %s", get_time(p), philo_n, s);
+		else if (background == 1)
+			printf("\e[42m\e[30m%4ld %d\e[49m\e[97m %s", get_time(p), philo_n, s);
+		else if (background == 2)
+			printf("\e[43m\e[30m%4ld %d\e[49m\e[97m %s", get_time(p), philo_n, s);
+		else if (background == 3)
+			printf("\e[44m\e[30m%4ld %d\e[49m\e[97m %s", get_time(p), philo_n, s);
+		else if (background == 4)
+			printf("\e[45m\e[30m%4ld %d\e[49m\e[97m %s", get_time(p), philo_n, s);
+		else if (background == 5)
+			printf("\e[46m\e[30m%4ld %d\e[49m\e[97m %s", get_time(p), philo_n, s);
 	}
 	pthread_mutex_unlock(&p->print);
 }

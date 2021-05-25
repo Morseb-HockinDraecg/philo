@@ -3,7 +3,7 @@
 if (( $# > 1 )); then
 	declare ARG=("$2 $3 $4 $5 $6 $7 $8")
 else
-	ARG="4 410 200 200"
+	ARG="5 410 200 200"
 fi
 
 make

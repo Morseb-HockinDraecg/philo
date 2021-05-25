@@ -2,7 +2,7 @@ NAME := philo_two
 
 SRC := main.c \
 	utils.c \
-	mutex.c \
+	sema.c \
 	init.c \
 	thread.c
 

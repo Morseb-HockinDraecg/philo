@@ -3,7 +3,7 @@
 
 # include <stdio.h>
 # include <unistd.h>
-# include <pthread.h>
+// # include <pthread.h>
 # include <sys/time.h>
 # include <stdlib.h>
 # include <semaphore.h>
@@ -41,7 +41,8 @@ enum	e_retrun
 	E_FAIL,
 };
 
-void		pthread_manag(t_philo *p, int stop);
+// void		pthread_manag(t_philo *p, int stop);
+void		process_manag(t_philo *p, int stop);
 
 int			chosing_action(t_philo *p, int philo_n);
 
