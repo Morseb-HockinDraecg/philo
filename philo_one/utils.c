@@ -36,6 +36,7 @@ void	free_mallocs(t_philo *p)
 	free(p->forks);
 	free(p->philo_last_action);
 	free(p->philo_last_meal);
+	free(p->philo_last_meal_tmp);
 }
 
 long int	get_time(t_philo *p)

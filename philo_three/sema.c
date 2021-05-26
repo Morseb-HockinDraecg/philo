@@ -14,6 +14,7 @@ int	loop_ckecking_dying_philo(t_philo *p)
 				sem_wait(p->print);
 				p->die = 0;
 				printf("%4ld %d %s", get_time(p), (i + 1), "died\n");
+				free_mallocs(p);
 				exit(1);
 			}
 		}
