@@ -31,7 +31,7 @@ static void	*routine(void *pt)
 	while (turns-- && p->die)
 		philo_loop(p, philo_n);
 	p->finished++;
-	free_mallocs(p);
+	// free_mallocs(p);
 	return (NULL);
 }
 
@@ -81,7 +81,8 @@ void	process_manag(t_philo *p, int stop)
 			n.pid_child[n.i] = n.pid;
 	}
 	if (!n.pid)
-		n.pid = pthread_manag(p, n.i + 1);
+		pthread_manag(p, n.i + 1);
 	else
 		normy_pw(n, p);
+	free(n.pid_child);
 }
