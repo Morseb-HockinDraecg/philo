@@ -31,7 +31,6 @@ static void	*routine(void *pt)
 	while (turns-- && p->die)
 		philo_loop(p, philo_n);
 	p->finished++;
-	// free_mallocs(p);
 	return (NULL);
 }
 
