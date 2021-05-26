@@ -41,49 +41,46 @@ static int	pthread_manag(t_philo *p, int philo_n)
 	p->init_philo = p->nb;
 	p->init_philo = philo_n;
 	pthread_create(&th, NULL, &routine, p);
-	// pthread_detach(th);
 	loop_ckecking_dying_philo(p);
 	pthread_join(th, 0);
-	// return (loop_ckecking_dying_philo(p));
-	exit(1);
-	return (0);
+	exit(0);
+}
+
+static void	normy_pw(t_normy n, t_philo *p)
+{
+	while (n.pid)
+	{
+		n.pid = waitpid(-1, &n.wstatus, 0);
+		if (errno == ECHILD)
+			break ;
+		else if (WIFEXITED(n.wstatus))
+		{
+			n.i = p->nb;
+			while (n.i--)
+				kill(n.pid_child[n.i], SIGKILL);
+		}
+	}
 }
 
 void	process_manag(t_philo *p, int stop)
 {
-	int			i;
-	int			pid;
-	int			*pid_child;
+	t_normy	n;
 
 	if (stop)
 		return ;
 	p->init_philo = p->nb;
-	i = -1;
-	while (++i < p->nb)
+	n.pid_child = (int *)malloc(sizeof(int) * p->nb);
+	n.i = -1;
+	while (++n.i < p->nb)
 	{
-		pid = fork();
-		if (!pid)
+		n.pid = fork();
+		if (!n.pid)
 			break ;
 		else
-			printf("%d\n", pid); //pid de l enfant a stocker dans *pid_child = malloc( nb_philo) puis kill quand retour d un mort
+			n.pid_child[n.i] = n.pid;
 	}
-	if (!pid)
-	{
-		pid = pthread_manag(p, i + 1);
-		// if (pid)
-		// {
-			// kill(0, SIGKILL);
-			// sem_post(p->print);
-		// }
-		// printf("pid : %d\n", pid);
-	}
+	if (!n.pid)
+		n.pid = pthread_manag(p, n.i + 1);
 	else
-	{
-		while (pid)
-		{
-			pid = waitpid(-1, NULL, 0);
-			if (errno == ECHILD)
-				break ;
-		}
-	}
+		normy_pw(n, p);
 }

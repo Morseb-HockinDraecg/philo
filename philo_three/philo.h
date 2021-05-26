@@ -28,6 +28,14 @@ typedef struct s_philo
 	int				*philo_last_meal_tmp;
 }	t_philo;
 
+typedef struct s_normy
+{
+	int			i;
+	int			pid;
+	int			*pid_child;
+	int			wstatus;
+}	t_normy;
+
 enum	e_action
 {
 	E_FORK,

@@ -14,10 +14,7 @@ int	loop_ckecking_dying_philo(t_philo *p)
 				sem_wait(p->print);
 				p->die = 0;
 				printf("%4ld %d %s", get_time(p), (i + 1), "died\n");
-				// kill(0, SIGKILL);
-				// usleep(100);
-				// sem_post(p->print);
-				return (1);
+				exit(1);
 			}
 		}
 	}
