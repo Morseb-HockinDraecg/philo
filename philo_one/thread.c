@@ -32,6 +32,7 @@ static void	*routine(void *pt)
 	while (turns-- && p->die)
 		philo_loop(p, philo_n);
 	pthread_mutex_lock(&p->print);
+	// p->philo_last_meal_tmp[philo_n - 1] = get_time(p) + 5;
 	p->finished++;
 	pthread_mutex_unlock(&p->print);
 	return (NULL);

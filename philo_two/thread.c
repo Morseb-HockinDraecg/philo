@@ -32,6 +32,7 @@ static void	*routine(void *pt)
 	while (turns-- && p->die)
 		philo_loop(p, philo_n);
 	sem_wait(p->print);
+	p->philo_last_meal_tmp[philo_n - 1] = get_time(p) + 5;
 	p->finished++;
 	sem_post(p->print);
 	return (NULL);
