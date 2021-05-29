@@ -38,7 +38,6 @@ static int	pthread_manag(t_philo *p, int philo_n)
 {
 	pthread_t	th;
 
-	p->init_philo = p->nb;
 	p->init_philo = philo_n;
 	pthread_create(&th, NULL, &routine, p);
 	loop_ckecking_dying_philo(p);

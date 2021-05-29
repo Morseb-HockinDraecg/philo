@@ -14,6 +14,7 @@ void	loop_ckecking_dying_philo(t_philo *p)
 		i = -1;
 		while (++i < p->nb)
 		{
+			p->philo_last_meal[i] = get_time(p) - p->philo_last_meal_tmp[i];
 			if (p->philo_last_meal[i] >= p->die)
 			{
 				pthread_mutex_lock(&p->print);
@@ -33,7 +34,8 @@ static void	chosing_action_algo(t_philo *p, int philo_n, int *has_eat)
 	int			philo;
 
 	philo = philo_n - 1;
-	p->philo_last_meal[philo] = get_time(p) - p->philo_last_meal_tmp[philo];
+	if (philo_n % 2)
+		usleep(81);
 	pthread_mutex_lock(&p->forks[philo_n - 1]);
 	print_msg("\e[33mhas taken a fork\e[00m\n", p, philo_n, E_FORK);
 	i = philo_n % p->nb;
